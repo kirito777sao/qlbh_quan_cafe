@@ -1,0 +1,11 @@
+D:\Code_All\github-clone\qlbh_quan_cafe\QLBH_Cafe_N7\bin\Debug\QLBH_Cafe_N7.exe.config
+D:\Code_All\github-clone\qlbh_quan_cafe\QLBH_Cafe_N7\bin\Debug\QLBH_Cafe_N7.exe
+D:\Code_All\github-clone\qlbh_quan_cafe\QLBH_Cafe_N7\bin\Debug\QLBH_Cafe_N7.pdb
+D:\Code_All\github-clone\qlbh_quan_cafe\QLBH_Cafe_N7\obj\Debug\QLBH_Cafe_N7.csproj.AssemblyReference.cache
+D:\Code_All\github-clone\qlbh_quan_cafe\QLBH_Cafe_N7\obj\Debug\QLBH_Cafe_N7.DangNhap.resources
+D:\Code_All\github-clone\qlbh_quan_cafe\QLBH_Cafe_N7\obj\Debug\QLBH_Cafe_N7.Properties.Resources.resources
+D:\Code_All\github-clone\qlbh_quan_cafe\QLBH_Cafe_N7\obj\Debug\QLBH_Cafe_N7.csproj.GenerateResource.cache
+D:\Code_All\github-clone\qlbh_quan_cafe\QLBH_Cafe_N7\obj\Debug\QLBH_Cafe_N7.csproj.CoreCompileInputs.cache
+D:\Code_All\github-clone\qlbh_quan_cafe\QLBH_Cafe_N7\obj\Debug\QLBH_Cafe_N7.exe
+D:\Code_All\github-clone\qlbh_quan_cafe\QLBH_Cafe_N7\obj\Debug\QLBH_Cafe_N7.pdb
+D:\Code_All\github-clone\qlbh_quan_cafe\QLBH_Cafe_N7\obj\Debug\QLBH_Cafe_N7.QuanLyBanHang.resources
