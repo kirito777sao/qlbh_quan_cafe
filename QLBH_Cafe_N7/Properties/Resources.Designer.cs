@@ -69,5 +69,15 @@ namespace QLBH_Cafe_N7.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap z6000108680114_73d462e4ecbb3419e5f4c5126675b917 {
+            get {
+                object obj = ResourceManager.GetObject("z6000108680114_73d462e4ecbb3419e5f4c5126675b917", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

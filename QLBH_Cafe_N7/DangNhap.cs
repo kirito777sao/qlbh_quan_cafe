@@ -7,11 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using QLBH_Cafe_N7.DAO;
 
 namespace QLBH_Cafe_N7
 {
     public partial class DangNhap : Form
     {
+        private TaiKhoan taiKhoan = new TaiKhoan(); // Khai báo đối tượng TaiKhoan
         public DangNhap()
         {
             InitializeComponent();
@@ -20,13 +22,15 @@ namespace QLBH_Cafe_N7
         private void button1_Click(object sender, EventArgs e)
         {
             QuanLyBanHang qlbh = new QuanLyBanHang();
-            if(txtTenDN.Text == "" || txtMK.Text == "")
+            string userName = txtTenDN.Text;
+            string passWord = txtMK.Text;
+            if (userName == "" || passWord == "")
             {
                 MessageBox.Show("Vui lòng không để trống thông tin");
             }
             else
             {
-                if(txtTenDN.Text == "admin" && txtMK.Text == "123456")
+                if (taiKhoan.Login(userName, passWord)) // Gọi phương thức Login của lớp TaiKhoan
                 {
                     this.Hide();
                     qlbh.ShowDialog();

@@ -40,6 +40,10 @@
             this.cbLoaiSP = new System.Windows.Forms.ComboBox();
             this.panel3 = new System.Windows.Forms.Panel();
             this.lvHD = new System.Windows.Forms.ListView();
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.panel4 = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
             this.txtTongTien = new System.Windows.Forms.TextBox();
@@ -91,12 +95,14 @@
             this.adminToolStripMenuItem.Name = "adminToolStripMenuItem";
             this.adminToolStripMenuItem.Size = new System.Drawing.Size(55, 20);
             this.adminToolStripMenuItem.Text = "Admin";
+            this.adminToolStripMenuItem.Click += new System.EventHandler(this.adminToolStripMenuItem_Click);
             // 
             // thoátToolStripMenuItem
             // 
             this.thoátToolStripMenuItem.Name = "thoátToolStripMenuItem";
             this.thoátToolStripMenuItem.Size = new System.Drawing.Size(50, 20);
             this.thoátToolStripMenuItem.Text = "Thoát";
+            this.thoátToolStripMenuItem.Click += new System.EventHandler(this.thoátToolStripMenuItem_Click);
             // 
             // panel2
             // 
@@ -113,6 +119,11 @@
             // numSP
             // 
             this.numSP.Location = new System.Drawing.Point(358, 31);
+            this.numSP.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
             this.numSP.Name = "numSP";
             this.numSP.Size = new System.Drawing.Size(74, 20);
             this.numSP.TabIndex = 3;
@@ -132,6 +143,7 @@
             this.btThemMon.TabIndex = 2;
             this.btThemMon.Text = "Thêm Món";
             this.btThemMon.UseVisualStyleBackColor = true;
+            this.btThemMon.Click += new System.EventHandler(this.btThemMon_Click);
             // 
             // cbSP
             // 
@@ -148,6 +160,7 @@
             this.cbLoaiSP.Name = "cbLoaiSP";
             this.cbLoaiSP.Size = new System.Drawing.Size(182, 21);
             this.cbLoaiSP.TabIndex = 0;
+            this.cbLoaiSP.SelectedIndexChanged += new System.EventHandler(this.cbLoaiSP_SelectedIndexChanged);
             // 
             // panel3
             // 
@@ -160,12 +173,36 @@
             // 
             // lvHD
             // 
+            this.lvHD.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1,
+            this.columnHeader2,
+            this.columnHeader3,
+            this.columnHeader4});
+            this.lvHD.GridLines = true;
             this.lvHD.HideSelection = false;
-            this.lvHD.Location = new System.Drawing.Point(4, 4);
+            this.lvHD.Location = new System.Drawing.Point(4, 0);
             this.lvHD.Name = "lvHD";
             this.lvHD.Size = new System.Drawing.Size(442, 566);
             this.lvHD.TabIndex = 0;
             this.lvHD.UseCompatibleStateImageBehavior = false;
+            this.lvHD.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = "Tên Món";
+            this.columnHeader1.Width = 202;
+            // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Text = "Số Lượng";
+            // 
+            // columnHeader3
+            // 
+            this.columnHeader3.Text = "Giá Bán";
+            // 
+            // columnHeader4
+            // 
+            this.columnHeader4.Text = "Thành Tiền";
             // 
             // panel4
             // 
@@ -248,6 +285,7 @@
             this.btThanhToan.TabIndex = 4;
             this.btThanhToan.Text = "Thanh Toán";
             this.btThanhToan.UseVisualStyleBackColor = true;
+            this.btThanhToan.Click += new System.EventHandler(this.btThanhToan_Click);
             // 
             // btChuyenBan
             // 
@@ -261,7 +299,7 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Image = global::QLBH_Cafe_N7.Properties.Resources.Screenshot_2024_11_01_113726;
+            this.pictureBox1.Image = global::QLBH_Cafe_N7.Properties.Resources.z6000108680114_73d462e4ecbb3419e5f4c5126675b917;
             this.pictureBox1.Location = new System.Drawing.Point(4, 4);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(184, 128);
@@ -271,6 +309,7 @@
             // 
             // flowBan
             // 
+            this.flowBan.AutoScroll = true;
             this.flowBan.BackColor = System.Drawing.SystemColors.Info;
             this.flowBan.Location = new System.Drawing.Point(13, 28);
             this.flowBan.Name = "flowBan";
@@ -330,5 +369,9 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.TextBox txtTongTien;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ColumnHeader columnHeader1;
+        private System.Windows.Forms.ColumnHeader columnHeader2;
+        private System.Windows.Forms.ColumnHeader columnHeader3;
+        private System.Windows.Forms.ColumnHeader columnHeader4;
     }
 }

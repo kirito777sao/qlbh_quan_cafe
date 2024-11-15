@@ -91,6 +91,10 @@ INSERT INTO SanPham (TenSP, GiaBan, MaLoai) VALUES
     (N'Sữa chua trái cây', 25000, 8),
     (N'Soda chanh', 15000, 9);
 
+--INSERT INTO SanPham (TenSP, GiaBan, MaLoai) VALUES 
+--	(N'Martini', 150000, 10),
+--	(N'Daiquiri', 200000, 10)
+
 -- Bảng Bàn
 CREATE TABLE Ban (
     MaBan INT IDENTITY PRIMARY KEY,
@@ -110,7 +114,19 @@ INSERT INTO Ban (TenBan) VALUES
     (N'Bàn 8'),
     (N'Bàn 9'),
     (N'Bàn 10');
+
+--Set lại bàn
+--UPDATE Ban SET TinhTrang = N'Có Người' WHERE MaBan = 7
 	 
+--Cách insert bàn nhanh chóng:
+--DECLARE @i INT = 11
+
+--WHILE @i <= 21
+--BEGIN 
+--	INSERT dbo.Ban (TenBan) VALUES (N'Bàn '+ CAST (@i AS nvarchar(100)))
+--	SET @i = @i + 1
+--END
+
 -- Bảng Hóa đơn
 CREATE TABLE HD (
     MaHD INT IDENTITY PRIMARY KEY,
@@ -134,6 +150,9 @@ INSERT INTO HD (NgayBan, MaBan, TinhTrang) VALUES
     ('2023-12-18', 9, 1),
     ('2023-12-19', 10, 0);
 
+--INSERT INTO HD (NgayBan, MaBan, TinhTrang) VALUES
+--	(GETDATE(), 11, 0)
+
 -- Bảng Chi tiết hóa đơn
 CREATE TABLE ChiTietHD (
     MaHD INT NOT NULL,
@@ -143,6 +162,139 @@ CREATE TABLE ChiTietHD (
     FOREIGN KEY (MaHD) REFERENCES dbo.HD(MaHD),
     FOREIGN KEY (MaSP) REFERENCES dbo.SanPham(MaSP)
 );
+
+--Kiểm tra HD đã tồn tại hay chưa
+--Nên dùng
+CREATE PROCEDURE USP_InsertBillInfo
+    @idBill INT,
+    @idFood INT,
+    @count INT
+AS
+BEGIN
+    DECLARE @isExistsBillInfo INT;
+    DECLARE @foodCount INT = 1; 
+
+    SELECT @isExistsBillInfo = MaHD, @foodCount = b.SoLuong
+    FROM ChiTietHD AS b
+    WHERE MaHD = @idBill AND MaSP = @idFood;
+
+    IF (@isExistsBillInfo > 0)
+    BEGIN
+        DECLARE @newCount INT = @foodCount + @count;
+        IF (@newCount > 0) 
+            UPDATE ChiTietHD SET SoLuong = @foodCount + @count WHERE MaSP = @idFood;
+        ELSE
+            DELETE ChiTietHD WHERE MaHD = @idBill AND MaSP = @idFood;
+    END
+    ELSE
+    BEGIN
+        INSERT ChiTietHD(MaHD, MaSP, SoLuong)
+        VALUES (@idBill, @idFood, @count);
+    END
+END
+GO
+
+--CREATE PROCEDURE USP_InsertBillInfo
+--    @MaHD INT,
+--    @MaSP INT,
+--    @SoLuong INT
+--AS
+--BEGIN
+--    IF EXISTS (SELECT 1 FROM ChiTietHD WHERE MaHD = @MaHD AND MaSP = @MaSP)
+--    BEGIN
+--        -- Cập nhật số lượng
+--        UPDATE ChiTietHD 
+--        SET SoLuong = SoLuong + @SoLuong
+--        WHERE MaHD = @MaHD AND MaSP = @MaSP;
+
+--		--Xóa nếu SoLuong = 0 sau khi cập nhật
+--		IF (SELECT SoLuong FROM ChiTietHD WHERE MaHD = @MaHD AND MaSP = @MaSP) = 0
+--			DELETE FROM ChiTietHD WHERE MaHD = @MaHD AND MaSP = @MaSP;
+
+--    END
+--    ELSE
+--    BEGIN
+--        -- Thêm mới
+--        INSERT ChiTietHD (MaHD, MaSP, SoLuong)
+--        VALUES (@MaHD, @MaSP, @SoLuong);
+--    END
+--END;
+--GO
+
+--ALTER PROCEDURE USP_InsertBillInfo
+--    @idBill INT,
+--    @idFood INT,
+--    @count INT
+--AS
+--BEGIN
+--    -- Kiểm tra hóa đơn có tồn tại không
+--    IF NOT EXISTS (SELECT 1 FROM HD WHERE MaHD = @idBill)
+--    BEGIN
+--        PRINT N'Hóa đơn không tồn tại';
+--        RETURN;
+--    END
+
+--    -- Kiểm tra sản phẩm có tồn tại không
+--    IF NOT EXISTS (SELECT 1 FROM SanPham WHERE MaSP = @idFood)
+--    BEGIN
+--        PRINT N'Sản phẩm không tồn tại';
+--        RETURN;
+--    END
+
+--    DECLARE @isExistsBillInfo INT;
+--    DECLARE @foodCount INT;
+
+--    SELECT @isExistsBillInfo = COUNT(*), @foodCount = SUM(SoLuong)
+--    FROM ChiTietHD 
+--    WHERE MaHD = @idBill AND MaSP = @idFood;
+
+--    IF (@isExistsBillInfo > 0)
+--    BEGIN
+--        DECLARE @newCount INT = @foodCount + @count;
+
+--        IF (@newCount > 0)
+--        BEGIN
+--            UPDATE ChiTietHD 
+--            SET SoLuong = @newCount 
+--            WHERE MaHD = @idBill AND MaSP = @idFood;
+--        END
+--        ELSE
+--        BEGIN
+--            DELETE FROM ChiTietHD 
+--            WHERE MaHD = @idBill AND MaSP = @idFood;
+--        END
+--    END
+--    ELSE
+--    BEGIN
+--        IF (@count > 0)
+--        BEGIN
+--            INSERT INTO ChiTietHD (MaHD, MaSP, SoLuong)
+--            VALUES (@idBill, @idFood, @count);
+--        END
+--    END
+
+--    -- Nếu số lượng là âm, trừ bớt số lượng của món ăn
+--    IF (@count < 0)
+--    BEGIN
+--        DECLARE @currentQuantity INT;
+
+--        SELECT @currentQuantity = SoLuong 
+--        FROM ChiTietHD 
+--        WHERE MaHD = @idBill AND MaSP = @idFood;
+
+--        IF @currentQuantity IS NOT NULL AND @currentQuantity + @count >= 0
+--        BEGIN
+--            UPDATE ChiTietHD 
+--            SET SoLuong = @currentQuantity + @count 
+--            WHERE MaHD = @idBill AND MaSP = @idFood;
+--        END
+--        ELSE
+--        BEGIN
+--            PRINT N'Số lượng không đủ để trừ.';
+--        END
+--    END
+--END
+--GO
 
 -- Thêm 10 chi tiết hóa đơn 
 INSERT INTO ChiTietHD (MaHD, MaSP, SoLuong) VALUES
@@ -182,3 +334,58 @@ INSERT INTO NguyenLieu (TenNL, GiaNhap, SLTon, HanSD, TenNCC, MaLoai) VALUES
     (N'Khoai tây', 35000, 40, '2024-07-15', N'Công ty khoai tây H', 6),
     (N'Kem tươi', 60000, 12, '2024-04-10', N'Công ty kem I', 7),
     (N'Trái cây', 70000, 35, '2024-06-10', N'Siêu thị J', 8);
+
+--Câu truy vấn đa bảng hiển thị thông tin bàn 3
+--SELECT * FROM ChiTietHD AS cthd, HD AS hd, SanPham AS sp
+--WHERE cthd.MaHD = hd.MaHD AND cthd.MaSP = sp.MaSP AND hd.MaBan = 3
+
+--Câu truy vấn hiển thị cột theo ý muốn
+--SELECT sp.TenSP, cthd.SoLuong, sp.GiaBan, sp.GiaBan*cthd.SoLuong AS ThanhTien FROM ChiTietHD AS cthd, HD AS hd, SanPham AS sp
+--WHERE cthd.MaHD = hd.MaHD AND cthd.MaSP = sp.MaSP AND hd.MaBan = 3
+
+--Hiển thị ra  tổng số hóa đơn
+--SELECT MAX(MaHD) FROM HD
+
+--UPDATE HD SET TinhTrang = 1 WHERE MaHD = 8
+
+--Tạo trigger để cập nhật thông tin bàn khi thêm hay sửa
+CREATE TRIGGER UTG_UpdateBillInfo
+ON dbo.ChiTietHD FOR INSERT, UPDATE
+AS
+BEGIN
+	DECLARE @idBill INT
+	SELECT @idBill = MaHD FROM Inserted
+	DECLARE @idTable INT
+	SELECT @idTable = MaBan FROM dbo.HD WHERE MaHD = @idBill AND TinhTrang = 0
+	UPDATE Ban SET TinhTrang = N'Có Người' WHERE MaBan = @idTable
+END
+GO
+
+CREATE TRIGGER UTG_UpdateBill
+ON dbo.HD FOR UPDATE
+AS
+BEGIN
+	DECLARE @idBill INT
+	SELECT @idBill = MaHD FROM Inserted
+	DECLARE @idTable INT
+	SELECT @idTable = MaBan FROM dbo.HD WHERE MaHD = @idBill
+	DECLARE @count INT = 0
+	SELECT @count = COUNT(*) FROM HD WHERE MaBan = @idTable AND TinhTrang = 0
+	IF (@count = 0)
+		UPDATE Ban SET TinhTrang = N'Trống' WHERE MaBan = @idTable
+END
+GO
+
+--thêm cột giảm giá ở bảng HD
+ALTER TABLE HD 
+ADD GiamGia INT
+
+UPDATE HD SET GiamGia = 0
+
+ALTER TABLE HD ADD TongTien FLOAT
+
+-- doanh thu
+SELECT *--b.TenBan, NgayBan, GiamGia 
+FROM HD AS hd, ChiTietHD AS cthd, Ban AS b, SanPham AS sp
+WHERE NgayBan = '20241115' AND hd.TinhTrang = 1 AND b.MaBan = hd.MaBan
+AND cthd.MaHD = hd.MaHD AND cthd.MaSP = sp.MaSP
