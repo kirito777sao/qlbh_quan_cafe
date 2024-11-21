@@ -32,22 +32,24 @@ INSERT INTO TaiKhoan (TenDN, TenNV, MK, Loai) VALUES
 CREATE TABLE NhanVien (
     MaNV INT IDENTITY PRIMARY KEY,
     TenNV NVARCHAR(255) NOT NULL DEFAULT N'Chưa có tên',
-    Luong Float NOT NULL,
-    NgayLam DATE 
+    Chucvu NVARCHAR(255) NOT NULL DEFAULT N'Chưa có chức vụ',
+    NgaySinh NVARCHAR(50) ,
+	DiaChi NVARCHAR(255) NOT NULL DEFAULT N'Chưa có địa chỉ',
+	SoDienThoai TEXT,
 );
 
 -- Thêm 10 nhân viên 
-INSERT INTO NhanVien (TenNV, Luong, NgayLam) VALUES
-    (N'Tạ Xuân Hoàng', 7000000, '2023-12-01'),
-    (N'Trần Quang Huy', 8000000, '2023-12-15'),
-    (N'Phạm Duy Thái', 6000000, '2024-01-10'),
-    (N'Mai Thanh Minh', 7500000, '2023-11-20'),
-    (N'Bùi Ngọc Chiến', 9000000, '2023-10-10'),
-    (N'Nguyễn Mạnh Dũng', 6500000, '2023-12-25'),
-    (N'Mai Thế Đạt', 7800000, '2024-01-20'),
-    (N'Mai Huy Hùng', 8500000, '2023-11-15'),
-    (N'Trần Quang Tường', 7200000, '2024-02-10'),
-    (N'Ngô Quang Hưng', 8200000, '2023-12-05');
+INSERT INTO NhanVien (TenNV, Chucvu, NgaySinh, DiaChi, SoDienThoai) VALUES
+    (N'Tạ Xuân Hoàng', N'Nhân Viên' , '2003-12-01', N'Bắc Giang','0466865466'),
+    (N'Trần Quang Huy', N'Nhân Viên', '2003-12-15',N'Hà Nam', '0466812466'),
+    (N'Phạm Duy Thái', N'Giám Sát', '2004-01-10',N'Hà Nội','0349894908'),
+    (N'Mai Thanh Minh', N'Nhân Viên', '2003-11-20',N'Bắc Giang','0466885466'),
+    (N'Bùi Ngọc Chiến', N'Nhân Viên', '2003-10-10',N'Bắc Giang','0466865466'),
+    (N'Nguyễn Mạnh Dũng', N'Nhân Viên', '2003-12-25',N'Thanh Hóa','0466865466'),
+    (N'Mai Thế Đạt', N'Nhân Viên', '2004-01-20',N'Bắc Giang','0466865466'),
+    (N'Mai Huy Hùng', N'Nhân Viên', '2003-11-15',N'Bắc Giang','0466455446'),
+    (N'Trần Quang Tường', N'Nhân Viên', '2004-02-10',N'Bắc Giang','023165466'),
+    (N'Ngô Quang Hưng', N'Nhân Viên', '2003-12-05',N'Bắc Giang' ,'0466875466');
 
 -- Bảng Loại sản phẩm
 CREATE TABLE LoaiSP (
@@ -165,34 +167,34 @@ CREATE TABLE ChiTietHD (
 
 --Kiểm tra HD đã tồn tại hay chưa
 --Nên dùng
-CREATE PROCEDURE USP_InsertBillInfo
-    @idBill INT,
-    @idFood INT,
-    @count INT
-AS
-BEGIN
-    DECLARE @isExistsBillInfo INT;
-    DECLARE @foodCount INT = 1; 
+--CREATE PROCEDURE USP_InsertBillInfo
+--    @idBill INT,
+--    @idFood INT,
+--    @count INT
+--AS
+--BEGIN
+--    DECLARE @isExistsBillInfo INT;
+--    DECLARE @foodCount INT = 1; 
 
-    SELECT @isExistsBillInfo = MaHD, @foodCount = b.SoLuong
-    FROM ChiTietHD AS b
-    WHERE MaHD = @idBill AND MaSP = @idFood;
+--    SELECT @isExistsBillInfo = MaHD, @foodCount = b.SoLuong
+--    FROM ChiTietHD AS b
+--    WHERE MaHD = @idBill AND MaSP = @idFood;
 
-    IF (@isExistsBillInfo > 0)
-    BEGIN
-        DECLARE @newCount INT = @foodCount + @count;
-        IF (@newCount > 0) 
-            UPDATE ChiTietHD SET SoLuong = @foodCount + @count WHERE MaSP = @idFood;
-        ELSE
-            DELETE ChiTietHD WHERE MaHD = @idBill AND MaSP = @idFood;
-    END
-    ELSE
-    BEGIN
-        INSERT ChiTietHD(MaHD, MaSP, SoLuong)
-        VALUES (@idBill, @idFood, @count);
-    END
-END
-GO
+--    IF (@isExistsBillInfo > 0)
+--    BEGIN
+--        DECLARE @newCount INT = @foodCount + @count;
+--        IF (@newCount > 0) 
+--            UPDATE ChiTietHD SET SoLuong = @foodCount + @count WHERE MaSP = @idFood;
+--        ELSE
+--            DELETE ChiTietHD WHERE MaHD = @idBill AND MaSP = @idFood;
+--    END
+--    ELSE
+--    BEGIN
+--        INSERT ChiTietHD(MaHD, MaSP, SoLuong)
+--        VALUES (@idBill, @idFood, @count);
+--    END
+--END
+--GO
 
 --CREATE PROCEDURE USP_InsertBillInfo
 --    @MaHD INT,
@@ -349,43 +351,43 @@ INSERT INTO NguyenLieu (TenNL, GiaNhap, SLTon, HanSD, TenNCC, MaLoai) VALUES
 --UPDATE HD SET TinhTrang = 1 WHERE MaHD = 8
 
 --Tạo trigger để cập nhật thông tin bàn khi thêm hay sửa
-CREATE TRIGGER UTG_UpdateBillInfo
-ON dbo.ChiTietHD FOR INSERT, UPDATE
-AS
-BEGIN
-	DECLARE @idBill INT
-	SELECT @idBill = MaHD FROM Inserted
-	DECLARE @idTable INT
-	SELECT @idTable = MaBan FROM dbo.HD WHERE MaHD = @idBill AND TinhTrang = 0
-	UPDATE Ban SET TinhTrang = N'Có Người' WHERE MaBan = @idTable
-END
-GO
+-- -CREATE TRIGGER UTG_UpdateBillInfo
+--ON dbo.ChiTietHD FOR INSERT, UPDATE
+--AS
+--BEGIN
+--	DECLARE @idBill INT
+--	SELECT @idBill = MaHD FROM Inserted
+--	DECLARE @idTable INT
+--	SELECT @idTable = MaBan FROM dbo.HD WHERE MaHD = @idBill AND TinhTrang = 0
+--	UPDATE Ban SET TinhTrang = N'Có Người' WHERE MaBan = @idTable
+--END
+--GO
 
-CREATE TRIGGER UTG_UpdateBill
-ON dbo.HD FOR UPDATE
-AS
-BEGIN
-	DECLARE @idBill INT
-	SELECT @idBill = MaHD FROM Inserted
-	DECLARE @idTable INT
-	SELECT @idTable = MaBan FROM dbo.HD WHERE MaHD = @idBill
-	DECLARE @count INT = 0
-	SELECT @count = COUNT(*) FROM HD WHERE MaBan = @idTable AND TinhTrang = 0
-	IF (@count = 0)
-		UPDATE Ban SET TinhTrang = N'Trống' WHERE MaBan = @idTable
-END
-GO
+--CREATE TRIGGER UTG_UpdateBill
+--ON dbo.HD FOR UPDATE
+--AS
+--BEGIN
+--	DECLARE @idBill INT
+--	SELECT @idBill = MaHD FROM Inserted
+--	DECLARE @idTable INT
+--	SELECT @idTable = MaBan FROM dbo.HD WHERE MaHD = @idBill
+--	DECLARE @count INT = 0
+--	SELECT @count = COUNT(*) FROM HD WHERE MaBan = @idTable AND TinhTrang = 0
+--	IF (@count = 0)
+--		UPDATE Ban SET TinhTrang = N'Trống' WHERE MaBan = @idTable
+--END
+--GO
 
---thêm cột giảm giá ở bảng HD
-ALTER TABLE HD 
-ADD GiamGia INT
+----thêm cột giảm giá ở bảng HD
+--ALTER TABLE HD 
+--ADD GiamGia INT
 
-UPDATE HD SET GiamGia = 0
+--UPDATE HD SET GiamGia = 0
 
-ALTER TABLE HD ADD TongTien FLOAT
+--ALTER TABLE HD ADD TongTien FLOAT
 
--- doanh thu
-SELECT *--b.TenBan, NgayBan, GiamGia 
-FROM HD AS hd, ChiTietHD AS cthd, Ban AS b, SanPham AS sp
-WHERE NgayBan = '20241115' AND hd.TinhTrang = 1 AND b.MaBan = hd.MaBan
-AND cthd.MaHD = hd.MaHD AND cthd.MaSP = sp.MaSP
+---- doanh thu
+--SELECT *--b.TenBan, NgayBan, GiamGia 
+--FROM HD AS hd, ChiTietHD AS cthd, Ban AS b, SanPham AS sp
+--WHERE NgayBan = '20241115' AND hd.TinhTrang = 1 AND b.MaBan = hd.MaBan
+--AND cthd.MaHD = hd.MaHD AND cthd.MaSP = sp.MaSP

@@ -43,8 +43,10 @@ namespace QLBH_Cafe_N7
 
         private void nhânViênToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
-        }
+			QuanLyNhanVien f = new QuanLyNhanVien();
+			f.MdiParent = this;
+			f.Show();
+		}
 
         private void nguyênLiệuToolStripMenuItem_Click(object sender, EventArgs e)
         {

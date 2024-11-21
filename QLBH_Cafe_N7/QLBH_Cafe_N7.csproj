@@ -69,6 +69,7 @@
     <Compile Include="DAO\HoaDon.cs" />
     <Compile Include="DAO\LoaiSP.cs" />
     <Compile Include="DAO\MenuDAO.cs" />
+    <Compile Include="DAO\NhanVien.cs" />
     <Compile Include="DAO\SanPham.cs" />
     <Compile Include="DAO\TaiKhoan.cs" />
     <Compile Include="DoanhThu.cs">
@@ -98,6 +99,12 @@
     <Compile Include="QuanLyBanHang.Designer.cs">
       <DependentUpon>QuanLyBanHang.cs</DependentUpon>
     </Compile>
+    <Compile Include="QuanLyNhanVien.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="QuanLyNhanVien.Designer.cs">
+      <DependentUpon>QuanLyNhanVien.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Admin.resx">
       <DependentUpon>Admin.cs</DependentUpon>
     </EmbeddedResource>
@@ -122,6 +129,9 @@
     </Compile>
     <EmbeddedResource Include="QuanLyBanHang.resx">
       <DependentUpon>QuanLyBanHang.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="QuanLyNhanVien.resx">
+      <DependentUpon>QuanLyNhanVien.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

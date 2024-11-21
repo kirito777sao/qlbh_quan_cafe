@@ -15,7 +15,7 @@ namespace QLBH_Cafe_N7
 
         public void openConnection()
         {
-            string chuoikn = "Server=-PC\\MSSQLSERVER01;Database=QuanLyQuanCafe;Integrated Security=True";
+            string chuoikn = "Server=THAI\\PHAMDUYTHAI;Database=QuanLyQuanCafe;Integrated Security=True";
             conn = new SqlConnection(chuoikn);
             conn.Open();
         }
