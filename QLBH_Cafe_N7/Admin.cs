@@ -26,7 +26,9 @@ namespace QLBH_Cafe_N7
 
         private void sảnPhẩmToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            QLSP f = new QLSP();
+            f.MdiParent = this;
+            f.Show();
         }
 
         private void danhMụcSảnPhẩmToolStripMenuItem_Click(object sender, EventArgs e)
